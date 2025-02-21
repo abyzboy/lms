@@ -12,7 +12,7 @@ class User(db.Model, UserMixin):
     id: Mapped[int] = mapped_column(Integer(), primary_key=True)
     email: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     username : Mapped[str] = mapped_column(String(50), nullable=False)
-    password : Mapped[str] = mapped_column(String(50), nullable=False)
+    password : Mapped[str] = mapped_column(String(200), nullable=False)
 
     authored_courses  = relationship(Course, back_populates='author')
     

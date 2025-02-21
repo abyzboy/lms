@@ -1,4 +1,22 @@
 {% extends 'main/base.html' %}
 
-{% blcok title %}Главная страница{% endblock %}
-{% block content %}{% block content %}
+{% block title %}Главная страница{% endblock %}
+{% block content %}
+{% if not current_user.is_authenticated %}
+    <form method="post" enctype="multipart/form-data" class="form-control d-flex flex-column gap-3">
+        {{form.csrf_token}}
+        {{form.username(class="form-control", placeholder="ФИО")}}
+        {{form.email(class="form-control", placeholder="Почта")}}
+        {% if form.email.errors %}
+            <div class="invalid-feedback">
+                {% for error in form.email.errors%}
+                    <span>{{error}}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {{form.password(class="form-control", placeholder="ПАРОЛЬ")}}
+        {{form.confirm_password(class="form-control", placeholder="ПОДТВЕРДИТЕ ПАРОЛЬ")}}
+        {{form.submit(class="btn btn-success")}}
+{% endif %}
+</form>
+{% endblock %}

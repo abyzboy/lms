@@ -1,21 +1,29 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_required, current_user
+from flask_login import current_user, login_user, logout_user
+from ..extensions import bcrypt
 from ..models.user import User
 from ..extensions import db
+from ..forms import RegistrationForm
 
 main = Blueprint('main', __name__)
 
 @main.route('/', methods=['POST', 'GET'])
 def index():
-    return '<p1>Hello</p1>'
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, password=hashed_password, email=form.email.data)
+        try:
+            db.session.add(user)
+            db.session.commit()
+            flash('Успешная регистрация')
+            login_user(user)
+        except Exception as e:
+            flash(f'Ошибка {str(e)}')
+        return render_template('main/home.html', form=form)
+    return render_template('main/home.html', form=form)
 
-@main.route('/test', methods=['POST', 'GET'])
-def test():
-    user = User(email='521', username='521', password='125')
-    try:
-        db.session.add(user)
-        db.session.commit()
-        return '<p1>Ok</p1>'
-    except Exception as e:
-            print('неудача')
-    return '<p1>Not ok</p1>'
+@main.route('/logout', methods=['POST', 'GET'])
+def logout():
+    logout_user()
+    return redirect('/')
