@@ -15,3 +15,8 @@ class RegistrationForm(FlaskForm):
         if user:
             raise ValidationError("Данная почта уже занята. Пожалуйста, выберите другое...")
         
+class LoginForm(FlaskForm):
+    email = StringField('Почта', validators=[DataRequired(), Email(message='Введите почту корректно')])
+    password = PasswordField("Пароль", validators=[DataRequired(), Length(min=6, max=30)])
+    submit = SubmitField("Войти")
+        

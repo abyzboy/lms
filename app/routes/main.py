@@ -9,7 +9,7 @@ from ..config import Config
 main = Blueprint('main', __name__)
 
 @main.route('/', methods=['POST', 'GET'])
-def index():
+def home():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')

@@ -7,7 +7,7 @@
     {% block style %}{%endblock %}
     <title>{% block title %}{% endblock %}</title>
 </head>
-<header class="header"></header>
+<header class="header">{% include 'main/_header.html' %}</header>
 <body>
 <div class="page">
     {% include 'main/_flash.html'%}
