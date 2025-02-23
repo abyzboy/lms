@@ -13,5 +13,5 @@ class RegistrationForm(FlaskForm):
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user:
-            raise ValidationError("Данное имя пользователя уже занято. Пожалуйста, выберите другое...")
+            raise ValidationError("Данная почта уже занята. Пожалуйста, выберите другое...")
         
