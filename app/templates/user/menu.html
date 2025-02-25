@@ -2,5 +2,8 @@
 
 {% block title %}Меню{% endblock %}
 {% block content %}
-<a href="{{url_for('user.verificate')}}"><button type="button" class="btn btn-outline-light me-2">Отправить письмо верификации</button></a>
+{% if not current_user.is_verified %}
+    <a href="{{url_for('user.verificate')}}"><button type="button" class="btn btn-outline-light me-2">Отправить письмо верификации</button></a>
+    <br><a href="{{url_for('user.verificate')}}"><button type="button" class="btn btn-outline-light me-2">Свои курсы</button></a>
+{% endif %}
 {% endblock %}

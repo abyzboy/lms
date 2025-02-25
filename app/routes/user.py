@@ -5,6 +5,8 @@ from ..extensions import db, serializer, bcrypt
 from ..forms import LoginForm
 from ..functions import email_sender
 from ..config import Config
+
+
 user = Blueprint('user', __name__)
 
 @user.route('/confirm/<token>', methods=['POST', 'GET'])
@@ -21,7 +23,7 @@ def confirm_email(token, expiration=3600):
         print('Error:', e)
         return redirect(url_for('main.home'))
 
-@login_required
+
 @user.route('/login', methods=['POST', 'GET'])
 def login():
     form = LoginForm()
@@ -36,14 +38,14 @@ def login():
     
     return render_template('user/login.html', form=form)
         
-@login_required
 @user.route('/logout', methods=['POST', 'GET'])
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('main.home'))
 
-@login_required
 @user.route('/menu', methods=['POST', 'GET'])
+@login_required
 def menu():
     return render_template('user/menu.html')
 
