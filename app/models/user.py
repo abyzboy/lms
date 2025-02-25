@@ -14,6 +14,8 @@ class User(db.Model, UserMixin):
     username : Mapped[str] = mapped_column(String(50), nullable=False)
     password : Mapped[str] = mapped_column(String(200), nullable=False)
     is_verified : Mapped[bool] = mapped_column(Boolean(), default=False)
+    status : Mapped[str] = mapped_column(String(15), default='student')
+
     authored_courses  = relationship(Course, back_populates='author')
     
     courses = relationship(Course, secondary='user_course_association', back_populates='students') 

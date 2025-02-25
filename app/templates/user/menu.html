@@ -1,0 +1,6 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Меню{% endblock %}
+{% block content %}
+<a href="{{url_for('user.verificate')}}"><button type="button" class="btn btn-outline-light me-2">Отправить письмо верификации</button></a>
+{% endblock %}

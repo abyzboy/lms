@@ -6,7 +6,7 @@ load_dotenv()
 class Config(object):
     CELERY_BROKER_URL = 'redis://localhost:6379/0'
     CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-    secret_key = "None"
+    secret_key = "eloRfjgaw7124"
     APPNAME = "app"
     ROOT = os.path.abspath(APPNAME)
     USER = os.environ.get('POSTGRES_USER')
@@ -21,5 +21,5 @@ class Config(object):
 
 
 
-FROM_EMAIL = 'None'
-PASSWORD = 'None'
+FROM_EMAIL = 'shmerebek@gmail.com'
+PASSWORD = 'xwizixabprqaqlhc'

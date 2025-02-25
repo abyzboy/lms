@@ -1,9 +1,10 @@
 from flask import Blueprint, redirect, url_for, flash, request, render_template
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user, login_required
 from ..models.user import User
 from ..extensions import db, serializer, bcrypt
 from ..forms import LoginForm
-
+from ..functions import email_sender
+from ..config import Config
 user = Blueprint('user', __name__)
 
 @user.route('/confirm/<token>', methods=['POST', 'GET'])
@@ -20,6 +21,7 @@ def confirm_email(token, expiration=3600):
         print('Error:', e)
         return redirect(url_for('main.home'))
 
+@login_required
 @user.route('/login', methods=['POST', 'GET'])
 def login():
     form = LoginForm()
@@ -34,8 +36,26 @@ def login():
     
     return render_template('user/login.html', form=form)
         
-
+@login_required
 @user.route('/logout', methods=['POST', 'GET'])
 def logout():
     logout_user()
     return redirect(url_for('main.home'))
+
+@login_required
+@user.route('/menu', methods=['POST', 'GET'])
+def menu():
+    return render_template('user/menu.html')
+
+@login_required
+@user.route('/verificate', methods=['POST', 'GET'])
+def verificate():
+    user = User.query.get(current_user.id)
+    ref_email = f"{Config.DOMAIN}/confirm/{serializer.dumps(user.email, salt='email-confirm')}"
+    try:
+        email_sender.send_email.apply_async(kwargs={'subject': 'Подтверждение', 'body' : ref_email, 'to_email' : user.email})
+        flash('На вашу почту отправлено письмо', 'success')
+    except Exception as e:
+        flash('Произошла ошибка при отправке писма', str(e))
+    return redirect(request.referrer) if request.referrer else redirect(url_for('main.home'))
+
